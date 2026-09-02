@@ -1,0 +1,49 @@
+{
+  "repoUrl": "https://github.com/StepCode3630/P_FUN",
+  "projectName": "P_FUN",
+  "branch": "main",
+  "me": "StepCode3630",
+  "journalStartDate": null,
+  "exceptions": [
+    {
+      "id": "056f1c2a-772b-4d77-b22f-a8d23301039b",
+      "type": "commitless",
+      "name": "Chore: présentation du projet par le prof",
+      "description": "",
+      "date": "2026-08-26T11:10:00.000Z",
+      "duration": 60,
+      "status": "Done",
+      "author": "StepCode3630"
+    },
+    {
+      "id": "c7eab564-62db-4f60-823f-0de30c06e6c6",
+      "type": "commitless",
+      "name": "Chore: Faire la planification",
+      "description": "",
+      "date": "2026-08-26T12:10:00.000Z",
+      "duration": 135,
+      "status": "Done",
+      "author": "StepCode3630"
+    },
+    {
+      "id": "5983bd58-ae50-401d-98c3-d07c6e73e47f",
+      "type": "commitless",
+      "name": "chore: faire la maquette",
+      "description": "",
+      "date": "2026-09-02T11:10:00.000Z",
+      "duration": 50,
+      "status": "Done",
+      "author": "StepCode3630"
+    },
+    {
+      "id": "b52ef2fe-6794-4f37-b492-045423b0b1c8",
+      "type": "commitless",
+      "name": "learn: choix d'application",
+      "description": "",
+      "date": "2026-09-02T12:00:00.000Z",
+      "duration": 30,
+      "status": "Done",
+      "author": "StepCode3630"
+    }
+  ]
+}
