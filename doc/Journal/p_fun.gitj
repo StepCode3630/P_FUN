@@ -44,6 +44,16 @@
       "duration": 30,
       "status": "Done",
       "author": "StepCode3630"
+    },
+    {
+      "id": "4e195388-352b-47a6-bad6-3dc065cab441",
+      "type": "commitless",
+      "name": "learn: apprentissage de quelques bases de Scottplot",
+      "description": "",
+      "date": "2026-09-02T14:14:00.000Z",
+      "duration": 20,
+      "status": "Done",
+      "author": "StepCode3630"
     }
   ]
 }
