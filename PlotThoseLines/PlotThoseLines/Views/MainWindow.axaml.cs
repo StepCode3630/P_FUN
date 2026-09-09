@@ -16,7 +16,5 @@ public partial class MainWindow : Window
 
         avaPlot1.Plot.Add.Scatter(dataX, dataY);
         avaPlot1.Refresh();
-
     }
-
 }

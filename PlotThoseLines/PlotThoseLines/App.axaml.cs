@@ -17,12 +17,24 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow
+            var mainWindow = new MainWindow
             {
                 DataContext = new MainViewModel(),
+            };
+
+            desktop.MainWindow = mainWindow;
+
+            mainWindow.Opened += async (_, _) => {
+                var custom = new CustomPresenter();
+                await custom.ShowDialog(mainWindow);
             };
         }
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    private void MainWindow_Opened(object? sender, System.EventArgs e)
+    {
+        throw new System.NotImplementedException();
     }
 }

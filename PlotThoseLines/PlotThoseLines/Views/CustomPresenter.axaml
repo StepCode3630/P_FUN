@@ -1,0 +1,66 @@
+<Window
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  x:Class="PlotThoseLines.Views.CustomPresenter"
+  Title="CustomPresenter"
+  Background="white"
+  Width="600"
+  MinWidth="600"
+  Height="350"
+  MinHeight="300"
+>
+
+
+  <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="15">
+    <TextBlock
+      Text="Vous pouvez importer des fichiers CSV et JSON et afficher la courbe sur le graphe."
+      Foreground="Black"
+      TextWrapping="Wrap"
+      TextAlignment="Center"
+      Width="350"
+    />
+
+    <Button Content="Fermer" HorizontalAlignment="Center" Click="CloseWindow">
+      <Button.Styles>
+        <Style Selector="Button">
+          <Setter Property="Background" Value="White" />
+          <Setter Property="Foreground" Value="Black" />
+          <Setter Property="BorderBrush" Value="Black" />
+        </Style>
+
+        <Style Selector="Button:pointerover">
+          <Setter Property="Background" Value="Black" />
+          <Setter Property="Foreground" Value="White" />
+          <Setter Property="BorderBrush" Value="Black" />
+                        <Setter Property="Cursor" Value="Hand" />
+
+        </Style>
+
+        <Style Selector="Button:pressed">
+          <Setter Property="Background" Value="Gray" />
+          <Setter Property="Foreground" Value="White" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+      </Button.Styles>
+
+      <Button.Template>
+        <ControlTemplate>
+          <Border
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="1"
+            CornerRadius="4"
+            Padding="12,6"
+          >
+            <ContentPresenter
+              Content="{TemplateBinding Content}"
+              Foreground="{TemplateBinding Foreground}"
+              HorizontalContentAlignment="Center"
+              VerticalContentAlignment="Center"
+            />
+          </Border>
+        </ControlTemplate>
+      </Button.Template>
+    </Button>
+  </StackPanel>
+</Window>
