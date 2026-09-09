@@ -20,8 +20,8 @@
       "type": "commitless",
       "name": "Chore: Faire la planification",
       "description": "",
-      "date": "2026-08-26T12:10:00.000Z",
-      "duration": 135,
+      "date": "2026-08-26T14:10",
+      "duration": 130,
       "status": "Done",
       "author": "StepCode3630"
     },
@@ -30,8 +30,8 @@
       "type": "commitless",
       "name": "chore: faire la maquette",
       "description": "",
-      "date": "2026-09-02T11:10:00.000Z",
-      "duration": 50,
+      "date": "2026-09-02T13:10",
+      "duration": 45,
       "status": "Done",
       "author": "StepCode3630"
     },
