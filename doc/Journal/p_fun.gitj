@@ -54,6 +54,16 @@
       "duration": 20,
       "status": "Done",
       "author": "StepCode3630"
+    },
+    {
+      "id": "ff762e74-cc36-40e4-88bc-8fb431822b9b",
+      "type": "commitless",
+      "name": "doc(maquette): maj la maquette",
+      "description": "",
+      "date": "2026-09-09T14:34:00.000Z",
+      "duration": 25,
+      "status": "Done",
+      "author": "StepCode3630"
     }
   ]
 }
