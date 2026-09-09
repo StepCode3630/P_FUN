@@ -9,8 +9,6 @@
   Height="350"
   MinHeight="300"
 >
-
-
   <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="15">
     <TextBlock
       Text="Vous pouvez importer des fichiers CSV et JSON et afficher la courbe sur le graphe."
@@ -32,14 +30,13 @@
           <Setter Property="Background" Value="Black" />
           <Setter Property="Foreground" Value="White" />
           <Setter Property="BorderBrush" Value="Black" />
-                        <Setter Property="Cursor" Value="Hand" />
-
+          <Setter Property="Cursor" Value="Hand" />
         </Style>
 
         <Style Selector="Button:pressed">
           <Setter Property="Background" Value="Gray" />
           <Setter Property="Foreground" Value="White" />
-            <Setter Property="Cursor" Value="Hand" />
+          <Setter Property="Cursor" Value="Hand" />
         </Style>
       </Button.Styles>
 
