@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RootNamespace>PlotThoseLines</RootNamespace>
     <OutputType>WinExe</OutputType>
@@ -22,6 +22,7 @@
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="CsvHelper" Version="33.1.0" />
     <PackageReference Include="ScottPlot.Avalonia" Version="5.1.59" />
   </ItemGroup>
 </Project>
