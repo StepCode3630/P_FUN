@@ -64,6 +64,26 @@
       "duration": 25,
       "status": "Done",
       "author": "StepCode3630"
+    },
+    {
+      "id": "41d036b7-5f82-4e95-89e0-79aa8b7e6360",
+      "type": "commitless",
+      "name": "chore: install csvhealper",
+      "description": "",
+      "date": "2026-09-16T11:10:00.000Z",
+      "duration": 10,
+      "status": "Done",
+      "author": "StepCode3630"
+    },
+    {
+      "id": "ce644ef3-bb0a-41f6-92f1-0e48c39db9a9",
+      "type": "commitless",
+      "name": "learn: comment utiliser csvhelper",
+      "description": "",
+      "date": "2026-09-16T11:20:00.000Z",
+      "duration": 35,
+      "status": "Done",
+      "author": "StepCode3630"
     }
   ]
 }
