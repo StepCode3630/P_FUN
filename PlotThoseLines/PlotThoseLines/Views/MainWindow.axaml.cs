@@ -64,19 +64,25 @@ public partial class MainWindow : Window
         }
     }
 
-    private void PreparePlotData()
+    private void PreparePlotData(string xColumn, string yColumn)
     { // TODO :
+        // 0. Vider _xs & _ys
         // 1. Vérifier que SelectedXColumn et SelectedYColumn ne sont pas null
         // 2. Parcourir Rows
         // 3. Récupérer les valeurs avec row[SelectedXColumn]
         // 4. Les convertir en double
         // 5. Ajouter uniquement les lignes valides dans _xs et _ys}
-        if (SelectedYColumn == null & SelectedXColumn == null)
+
+        _xs.Clear();
+        _ys.Clear();
+
+        if (yColumn == null & xColumn == null)
             throw new Exception();
+
         foreach (var row in Rows)
         {
-            string xText = row[SelectedXColumn];
-            string yText = row[SelectedYColumn];
+            string xText = row[xColumn];
+            string yText = row[yColumn];
 
             bool xIsValid = double.TryParse(
                 xText,
@@ -90,26 +96,38 @@ public partial class MainWindow : Window
                 CultureInfo.InvariantCulture,
                 out double y
             );
+
+            if (!xIsValid || !yIsValid)
+                continue;
+
             _xs.Add(x);
             _ys.Add(y);
         }
     }
-    
-
 
     public MainWindow()
     {
         InitializeComponent();
 
+        ImportCSV(
+            "/home/patricnystepan/Documents/Github/P_FUN/doc/Fichier import/production_electricite_complete_normalized.csv"
+        );
 
         AvaPlot avaPlot1 = this.Find<AvaPlot>("AvaPlot1");
 
+        foreach (string yColumn in AvailableColumns)
+        {
+            //On aime pas les années
+            if (yColumn == SelectedXColumn)
+                continue;
 
+            PreparePlotData(SelectedXColumn, yColumn);
 
-        var sig1 = avaPlot1.Plot.Add.Scatter(_xs, _ys);
+            var scatter = avaPlot1.Plot.Add.Scatter(_xs.ToArray(), _ys.ToArray());
+            scatter.LegendText = yColumn;
+        }
 
         avaPlot1.Plot.ShowLegend(Alignment.UpperLeft, Orientation.Vertical);
-
         avaPlot1.Refresh();
     }
 }
