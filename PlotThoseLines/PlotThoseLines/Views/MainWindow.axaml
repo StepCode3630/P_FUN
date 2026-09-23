@@ -5,6 +5,7 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="using:PlotThoseLines.Views"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:myclass="using:PlotThoseLines.MyClass"
   xmlns:scottplot="using:ScottPlot"
   mc:Ignorable="d"
   d:DesignWidth="800"
@@ -31,18 +32,21 @@
       >
         <TextBlock>Plot those lines</TextBlock>
 
-        <TextBlock Text="Listes">
-          <ToolTip.Tip>
-            <Border Background="White" Padding="10" BorderBrush="Gray" BorderThickness="1">
-              <ScrollViewer MaxHeight="200" Width="250" VerticalScrollBarVisibility="Auto">
-                <StackPanel Spacing="8">
-                  <TextBlock Text="Élément 1" />
-                  <TextBlock Text="Élément 2" />
-                </StackPanel>
-              </ScrollViewer>
-            </Border>
-          </ToolTip.Tip>
-        </TextBlock>
+        <Button Content="Listes">
+          <Button.Flyout>
+            <MenuFlyout ItemsSource="{Binding Listes}">
+              <MenuFlyout.ItemContainerTheme>
+                <ControlTheme
+                  TargetType="MenuItem"
+                  BasedOn="{StaticResource {x:Type MenuItem}}"
+                  x:DataType="myclass:ListeMenuItem"
+                >
+                  <Setter Property="Header" Value="{Binding Nom}" />
+                </ControlTheme>
+              </MenuFlyout.ItemContainerTheme>
+            </MenuFlyout>
+          </Button.Flyout>
+        </Button>
         <Button Content="Aide" />
       </StackPanel>
     </Border>

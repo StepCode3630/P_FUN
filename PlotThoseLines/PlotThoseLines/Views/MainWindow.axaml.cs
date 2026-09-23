@@ -9,6 +9,8 @@ using System.Xml.Linq;
 using Avalonia.Controls;
 using CsvHelper;
 using CsvHelper.Configuration;
+using PlotThoseLines.MyClass;
+using PlotThoseLines.ViewModels;
 using ScottPlot;
 using ScottPlot.ArrowShapes;
 using ScottPlot.Avalonia;
@@ -105,12 +107,17 @@ public partial class MainWindow : Window
         }
     }
 
+   
+
     public MainWindow()
     {
         InitializeComponent();
 
+        DataContext = new MainViewModel();
+
         ImportCSV(
-            "/home/patricnystepan/Documents/Github/P_FUN/doc/Fichier import/production_electricite_complete_normalized.csv"
+            //"/home/patricnystepan/Documents/Github/P_FUN/doc/Fichier import/production_electricite_complete_normalized.csv" ||
+            "C:\\Users\\pl77sbr\\source\\repos\\P_FUN\\doc\\Fichier import\\production_electricite_complete_normalized.csv"
         );
 
         AvaPlot avaPlot1 = this.Find<AvaPlot>("AvaPlot1");
