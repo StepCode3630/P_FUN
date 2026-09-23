@@ -45,8 +45,10 @@
                 </ControlTheme>
               </MenuFlyout.ItemContainerTheme>
             </MenuFlyout>
+
           </Button.Flyout>
         </Button>
+          <Button Content="Ajouter une liste" Click="OnAddList" />
         <Button Content="Aide" />
       </StackPanel>
     </Border>

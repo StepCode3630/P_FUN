@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Windows.Markup;
-using System.Xml.Linq;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
 using CsvHelper;
 using CsvHelper.Configuration;
 using PlotThoseLines.MyClass;
@@ -15,6 +9,14 @@ using ScottPlot;
 using ScottPlot.ArrowShapes;
 using ScottPlot.Avalonia;
 using ScottPlot.Colormaps;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Windows.Markup;
+using System.Xml.Linq;
 using Tmds.DBus.Protocol;
 
 namespace PlotThoseLines.Views;
@@ -107,20 +109,31 @@ public partial class MainWindow : Window
         }
     }
 
-   
-
-    public MainWindow()
+    public async void OnAddList(object sender, RoutedEventArgs args)
     {
-        InitializeComponent();
+        var customOptions = new FilePickerOpenOptions
+        {
+            Title = "Choisir un fichier csv",
+            AllowMultiple = false,
+            FileTypeFilter = new[]
+            {
+                new FilePickerFileType("Fichiers CSV") { Patterns = new[] { "*.csv" } },
+            },
+        };
+        var storage = await StorageProvider.OpenFilePickerAsync(customOptions);
 
-        DataContext = new MainViewModel();
+        var file = storage[0];
 
-        ImportCSV(
-            //"/home/patricnystepan/Documents/Github/P_FUN/doc/Fichier import/production_electricite_complete_normalized.csv" ||
-            "C:\\Users\\pl77sbr\\source\\repos\\P_FUN\\doc\\Fichier import\\production_electricite_complete_normalized.csv"
-        );
+        string pathFile = file.Path.LocalPath;
 
-        AvaPlot avaPlot1 = this.Find<AvaPlot>("AvaPlot1");
+        ImportCSV(pathFile);
+
+        InitializePlot();
+    }
+
+    private void InitializePlot()
+    {
+        AvaPlot? avaPlot1 = this.FindControl<AvaPlot>("AvaPlot1");
 
         foreach (string yColumn in AvailableColumns)
         {
@@ -136,5 +149,36 @@ public partial class MainWindow : Window
 
         avaPlot1.Plot.ShowLegend(Alignment.UpperLeft, Orientation.Vertical);
         avaPlot1.Refresh();
+        avaPlot1.Plot.Axes.AutoScale();
+    }
+
+
+    public MainWindow()
+    {
+        InitializeComponent();
+
+        DataContext = new MainViewModel();
+
+        //ImportCSV(
+        //    //"/home/patricnystepan/Documents/Github/P_FUN/doc/Fichier import/production_electricite_complete_normalized.csv" ||
+        //    "C:\\Users\\pl77sbr\\source\\repos\\P_FUN\\doc\\Fichier import\\production_electricite_complete_normalized.csv"
+        //);
+
+        //AvaPlot avaPlot1 = this.Find<AvaPlot>("AvaPlot1");
+
+        //foreach (string yColumn in AvailableColumns)
+        //{
+        //    //On aime pas les années
+        //    if (yColumn == SelectedXColumn)
+        //        continue;
+
+        //    PreparePlotData(SelectedXColumn, yColumn);
+
+        //    var scatter = avaPlot1.Plot.Add.Scatter(_xs.ToArray(), _ys.ToArray());
+        //    scatter.LegendText = yColumn;
+        //}
+
+        //avaPlot1.Plot.ShowLegend(Alignment.UpperLeft, Orientation.Vertical);
+        //avaPlot1.Refresh();
     }
 }
