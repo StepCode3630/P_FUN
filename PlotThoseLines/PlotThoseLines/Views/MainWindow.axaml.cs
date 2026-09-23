@@ -1,4 +1,12 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Windows.Markup;
+using System.Xml.Linq;
+using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using CsvHelper;
@@ -9,14 +17,6 @@ using ScottPlot;
 using ScottPlot.ArrowShapes;
 using ScottPlot.Avalonia;
 using ScottPlot.Colormaps;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Windows.Markup;
-using System.Xml.Linq;
 using Tmds.DBus.Protocol;
 
 namespace PlotThoseLines.Views;
@@ -122,6 +122,9 @@ public partial class MainWindow : Window
         };
         var storage = await StorageProvider.OpenFilePickerAsync(customOptions);
 
+        if(storage.Count == 0)
+            return;
+
         var file = storage[0];
 
         string pathFile = file.Path.LocalPath;
@@ -151,7 +154,6 @@ public partial class MainWindow : Window
         avaPlot1.Refresh();
         avaPlot1.Plot.Axes.AutoScale();
     }
-
 
     public MainWindow()
     {
