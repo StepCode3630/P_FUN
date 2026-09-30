@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Markup;
 using System.Xml.Linq;
 using Avalonia.Controls;
@@ -13,11 +14,14 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using PlotThoseLines.MyClass;
 using PlotThoseLines.ViewModels;
+using PlotThoseLines.Views;
 using ScottPlot;
 using ScottPlot.ArrowShapes;
 using ScottPlot.Avalonia;
 using ScottPlot.Colormaps;
+using ScottPlot.Plottables;
 using Tmds.DBus.Protocol;
+using static SkiaSharp.HarfBuzz.SKShaper;
 
 namespace PlotThoseLines.Views;
 
@@ -30,10 +34,24 @@ public partial class MainWindow : Window
     private List<double> _xs = new();
     private List<double> _ys = new();
 
+    private async Task<PlotSelectResult?> ShowOptions()
+    {
+        var columnNames = AvailableColumns.ToList();
+        var dialog = new PlotOptionsWindow(columnNames);
+        PlotSelectResult? result = await dialog.ShowDialog<PlotSelectResult?>(this);
+
+        return result;
+    }
+
     private void ImportCSV(string filePath)
     {
         Rows.Clear();
         AvailableColumns.Clear();
+        SelectedXColumn = null;
+        SelectedYColumn = null;
+
+        if (string.IsNullOrWhiteSpace(filePath))
+            return;
 
         var config = new CsvConfiguration(CultureInfo.CurrentCulture)
         {
@@ -46,13 +64,20 @@ public partial class MainWindow : Window
         using var reader = new StreamReader(filePath);
         using var csv = new CsvReader(reader, config);
 
-        csv.Read();
-        csv.ReadHeader();
+        if (!csv.Read() || !csv.ReadHeader())
+            return;
 
         string[]? headers = csv.HeaderRecord;
+        if (headers is null || headers.Length == 0)
+            return;
 
         foreach (string header in headers)
+        {
+            if (string.IsNullOrWhiteSpace(header))
+                continue;
+
             AvailableColumns.Add(header);
+        }
 
         while (csv.Read())
         {
@@ -61,6 +86,7 @@ public partial class MainWindow : Window
                 row[header] = csv.GetField(header) ?? string.Empty;
             Rows.Add(row);
         }
+
         if (AvailableColumns.Count >= 2)
         {
             SelectedXColumn = AvailableColumns[0];
@@ -68,38 +94,67 @@ public partial class MainWindow : Window
         }
     }
 
+    private static bool TryParseDoubleValue(string value, out double result)
+    {
+        var text = value.Trim();
+
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            result = 0;
+            return false;
+        }
+
+        text = text.Replace(" ", string.Empty);
+
+        if (double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out result))
+            return true;
+
+        if (double.TryParse(text, NumberStyles.Float, CultureInfo.CurrentCulture, out result))
+            return true;
+
+        if (text.Contains(',') && !text.Contains('.'))
+        {
+            text = text.Replace(',', '.');
+            return double.TryParse(
+                text,
+                NumberStyles.Float,
+                CultureInfo.InvariantCulture,
+                out result
+            );
+        }
+
+        if (text.Contains('.') && text.Contains(','))
+        {
+            text = text.Replace('.', ',');
+            return double.TryParse(
+                text,
+                NumberStyles.Float,
+                CultureInfo.CurrentCulture,
+                out result
+            );
+        }
+
+        result = 0;
+        return false;
+    }
+
     private void PreparePlotData(string xColumn, string yColumn)
-    { // TODO :
-        // 0. Vider _xs & _ys
-        // 1. Vérifier que SelectedXColumn et SelectedYColumn ne sont pas null
-        // 2. Parcourir Rows
-        // 3. Récupérer les valeurs avec row[SelectedXColumn]
-        // 4. Les convertir en double
-        // 5. Ajouter uniquement les lignes valides dans _xs et _ys}
+    {
+        if (string.IsNullOrWhiteSpace(xColumn) || string.IsNullOrWhiteSpace(yColumn))
+            return;
 
         _xs.Clear();
         _ys.Clear();
 
-        if (yColumn == null & xColumn == null)
-            throw new Exception();
-
-        foreach (var row in Rows)
+        foreach (Dictionary<string, string> row in Rows)
         {
-            string xText = row[xColumn];
-            string yText = row[yColumn];
+            if (!row.TryGetValue(xColumn, out string? xText))
+                continue;
+            if (!row.TryGetValue(yColumn, out string? yText))
+                continue;
 
-            bool xIsValid = double.TryParse(
-                xText,
-                NumberStyles.Float,
-                CultureInfo.InvariantCulture,
-                out double x
-            );
-            bool yIsValid = double.TryParse(
-                yText,
-                NumberStyles.Float,
-                CultureInfo.InvariantCulture,
-                out double y
-            );
+            bool xIsValid = TryParseDoubleValue(xText, out double x);
+            bool yIsValid = TryParseDoubleValue(yText, out double y);
 
             if (!xIsValid || !yIsValid)
                 continue;
@@ -109,50 +164,67 @@ public partial class MainWindow : Window
         }
     }
 
-    public async void OnAddList(object sender, RoutedEventArgs args)
+    private async void OnAddList(object? sender, RoutedEventArgs args)
     {
         var customOptions = new FilePickerOpenOptions
         {
-            Title = "Choisir un fichier csv",
+            Title = "Choisir un fichier CSV",
             AllowMultiple = false,
             FileTypeFilter = new[]
             {
                 new FilePickerFileType("Fichiers CSV") { Patterns = new[] { "*.csv" } },
             },
         };
-        var storage = await StorageProvider.OpenFilePickerAsync(customOptions);
 
-        if(storage.Count == 0)
+        IReadOnlyList<IStorageFile> storage = await StorageProvider.OpenFilePickerAsync(
+            customOptions
+        );
+
+        if (storage.Count == 0)
             return;
 
-        var file = storage[0];
+        IStorageFile file = storage[0];
 
         string pathFile = file.Path.LocalPath;
 
         ImportCSV(pathFile);
 
-        InitializePlot();
+        if (AvailableColumns.Count < 2)
+            return;
+
+        PlotSelectResult? options = await ShowOptions();
+
+        if (options is null)
+            return;
+
+        SelectedXColumn = options.XColumn;
+        SelectedYColumn = options.YColumn;
+
+
+        InitializePlot(options.PlotName);
     }
 
-    private void InitializePlot()
+    private void InitializePlot(string plotName)
     {
         AvaPlot? avaPlot1 = this.FindControl<AvaPlot>("AvaPlot1");
 
-        foreach (string yColumn in AvailableColumns)
-        {
-            //On aime pas les années
-            if (yColumn == SelectedXColumn)
-                continue;
 
-            PreparePlotData(SelectedXColumn, yColumn);
+
+        foreach (string ycolumn in AvailableColumns)
+        {
+            avaPlot1.Plot.Clear();
+
+            PreparePlotData(SelectedXColumn, ycolumn);
+
 
             var scatter = avaPlot1.Plot.Add.Scatter(_xs.ToArray(), _ys.ToArray());
-            scatter.LegendText = yColumn;
+            scatter.LegendText = SelectedYColumn ?? "Courbe";
         }
 
         avaPlot1.Plot.ShowLegend(Alignment.UpperLeft, Orientation.Vertical);
-        avaPlot1.Refresh();
+
         avaPlot1.Plot.Axes.AutoScale();
+        avaPlot1.Refresh();
     }
 
     public MainWindow()
