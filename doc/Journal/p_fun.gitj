@@ -114,6 +114,56 @@
       "duration": 10,
       "status": "Done",
       "author": "StepCode3630"
+    },
+    {
+      "id": "dcba8d7b-f6ab-4fe1-b944-ac2b3049eb4d",
+      "type": "commitless",
+      "name": "learn: recherche comment faire un combobox en axaml",
+      "description": "",
+      "date": "2026-09-30T11:10:00.000Z",
+      "duration": 30,
+      "status": "Done",
+      "author": "StepCode3630"
+    },
+    {
+      "id": "71dfcfa0-adb6-498d-84b4-2af6bacb44d4",
+      "type": "commitless",
+      "name": "feat: mise une fenêtre de selection de données",
+      "description": "Quand on veut ajouter un fichier, une fenêtre s'affiche pour customiser la courbe",
+      "date": "2026-09-30T11:40:00.000Z",
+      "duration": 45,
+      "status": "Done",
+      "author": "StepCode3630"
+    },
+    {
+      "id": "96383ff3-2df7-4314-82b2-3e2f8dd1604f",
+      "type": "commitless",
+      "name": "feat: partage des données entre la fenêtre custom file et le csv",
+      "description": "",
+      "date": "2026-09-30T12:25:00.000Z",
+      "duration": 45,
+      "status": "Done",
+      "author": "StepCode3630"
+    },
+    {
+      "id": "1de5c44f-c879-478f-8dfb-7d17500529e5",
+      "type": "commitless",
+      "name": "feat: affichage d'une courbe qu'on a choisi",
+      "description": "",
+      "date": "2026-09-30T13:25:00.000Z",
+      "duration": 60,
+      "status": "Done",
+      "author": "StepCode3630"
+    },
+    {
+      "id": "219d896a-8698-4d1b-b384-eea78e7fe40b",
+      "type": "commitless",
+      "name": "chore: debug",
+      "description": "",
+      "date": "2026-09-30T14:34:00.000Z",
+      "duration": 10,
+      "status": "Done",
+      "author": "StepCode3630"
     }
   ]
 }
