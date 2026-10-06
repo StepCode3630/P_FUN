@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -71,19 +71,27 @@ public partial class MainWindow : Window
         if (headers is null || headers.Length == 0)
             return;
 
-        foreach (string header in headers)
-        {
-            if (string.IsNullOrWhiteSpace(header))
-                continue;
+        // foreach (string header in headers)
+        // {
+        //     if (string.IsNullOrWhiteSpace(header))
+        //         continue;
 
-            AvailableColumns.Add(header);
-        }
+        //     AvailableColumns.Add(header);
+        // }
+
+        // filtrer les colonnes vides et les ajouter à AvailableColumns
+        headers.Where(header => !string.IsNullOrWhiteSpace(header)).ToList().ForEach(header => AvailableColumns.Add(header));
+
 
         while (csv.Read())
         {
-            var row = new Dictionary<string, string>();
-            foreach (string header in headers)
-                row[header] = csv.GetField(header) ?? string.Empty;
+            //var row = new Dictionary<string, string>();
+            // foreach (string header in headers)
+            //     row[header] = csv.GetField(header) ?? string.Empty;
+
+            var row = headers.ToDictionary(header => header, header => csv.GetField(header) ?? string.Empty);
+
+
             Rows.Add(row);
         }
 
@@ -127,6 +135,9 @@ public partial class MainWindow : Window
             _xs.Add(x);
             _ys.Add(y);
         }
+
+        // WIP
+        // Rows.Where(row => !double.TryParse(row[xColumn], NumberStyles.Float, CultureInfo.InvariantCulture, out double x) || !double.TryParse(row[yColumn], NumberStyles.Float, CultureInfo.InvariantCulture, out double y))
     }
 
     private async void OnAddList(object? sender, RoutedEventArgs args)
