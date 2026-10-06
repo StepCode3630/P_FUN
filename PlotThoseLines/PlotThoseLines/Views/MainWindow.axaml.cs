@@ -94,67 +94,32 @@ public partial class MainWindow : Window
         }
     }
 
-    private static bool TryParseDoubleValue(string value, out double result)
-    {
-        var text = value.Trim();
-
-        if (string.IsNullOrWhiteSpace(text))
-        {
-            result = 0;
-            return false;
-        }
-
-        text = text.Replace(" ", string.Empty);
-
-        if (double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out result))
-            return true;
-
-        if (double.TryParse(text, NumberStyles.Float, CultureInfo.CurrentCulture, out result))
-            return true;
-
-        if (text.Contains(',') && !text.Contains('.'))
-        {
-            text = text.Replace(',', '.');
-            return double.TryParse(
-                text,
-                NumberStyles.Float,
-                CultureInfo.InvariantCulture,
-                out result
-            );
-        }
-
-        if (text.Contains('.') && text.Contains(','))
-        {
-            text = text.Replace('.', ',');
-            return double.TryParse(
-                text,
-                NumberStyles.Float,
-                CultureInfo.CurrentCulture,
-                out result
-            );
-        }
-
-        result = 0;
-        return false;
-    }
-
     private void PreparePlotData(string xColumn, string yColumn)
     {
-        if (string.IsNullOrWhiteSpace(xColumn) || string.IsNullOrWhiteSpace(yColumn))
-            return;
 
         _xs.Clear();
         _ys.Clear();
 
-        foreach (Dictionary<string, string> row in Rows)
-        {
-            if (!row.TryGetValue(xColumn, out string? xText))
-                continue;
-            if (!row.TryGetValue(yColumn, out string? yText))
-                continue;
+        if (yColumn == null & xColumn == null)
+            throw new Exception();
 
-            bool xIsValid = TryParseDoubleValue(xText, out double x);
-            bool yIsValid = TryParseDoubleValue(yText, out double y);
+        foreach (var row in Rows)
+        {
+            string xText = row[xColumn];
+            string yText = row[yColumn];
+
+            bool xIsValid = double.TryParse(
+                xText,
+                NumberStyles.Float,
+                CultureInfo.InvariantCulture,
+                out double x
+            );
+            bool yIsValid = double.TryParse(
+                yText,
+                NumberStyles.Float,
+                CultureInfo.InvariantCulture,
+                out double y
+            );
 
             if (!xIsValid || !yIsValid)
                 continue;
@@ -198,7 +163,7 @@ public partial class MainWindow : Window
             return;
 
         SelectedXColumn = options.XColumn;
-        SelectedYColumn = options.YColumn;
+        SelectedYColumn = null;
 
 
         InitializePlot(options.PlotName);
@@ -206,19 +171,24 @@ public partial class MainWindow : Window
 
     private void InitializePlot(string plotName)
     {
+
         AvaPlot? avaPlot1 = this.FindControl<AvaPlot>("AvaPlot1");
+            avaPlot1.Plot.Clear();
+
 
 
 
         foreach (string ycolumn in AvailableColumns)
         {
-            avaPlot1.Plot.Clear();
+
+            if (ycolumn == SelectedXColumn)
+                continue;
 
             PreparePlotData(SelectedXColumn, ycolumn);
 
 
             var scatter = avaPlot1.Plot.Add.Scatter(_xs.ToArray(), _ys.ToArray());
-            scatter.LegendText = SelectedYColumn ?? "Courbe";
+            scatter.LegendText = ycolumn;
         }
 
         avaPlot1.Plot.ShowLegend(Alignment.UpperLeft, Orientation.Vertical);
