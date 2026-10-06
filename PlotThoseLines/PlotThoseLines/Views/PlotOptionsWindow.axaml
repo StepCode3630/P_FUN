@@ -14,8 +14,8 @@
     <TextBox Name="PlotNameTextBox" PlaceholderText="Years" />
     <TextBlock Text="Axe X" />
     <ComboBox Name="XColumnComboBox" />
-<!--    <TextBlock Text="Axe Y" />
-    <ComboBox Name="YColumnComboBox" />-->
+    <TextBlock Text="Axe Y" />
+    <TextBox Name="YColumnTextBox" PlaceholderText="Y" />
     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0,15,0,0">
       <Button Content="Annuler" Click="CancelOptions_Click" />
       <Button Content="Valider" Click="ValidateOptions_Click" />

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -163,7 +163,7 @@ public partial class MainWindow : Window
             return;
 
         SelectedXColumn = options.XColumn;
-        SelectedYColumn = null;
+        SelectedYColumn = options.YColumn;
 
 
         InitializePlot(options.PlotName);
@@ -173,8 +173,9 @@ public partial class MainWindow : Window
     {
 
         AvaPlot? avaPlot1 = this.FindControl<AvaPlot>("AvaPlot1");
-        avaPlot1.Plot.Clear();
 
+
+        avaPlot1.Plot.Clear();
 
 
 
@@ -194,7 +195,7 @@ public partial class MainWindow : Window
         avaPlot1.Plot.ShowLegend(Alignment.UpperLeft, Orientation.Vertical);
         avaPlot1.Plot.Title(plotName);
         avaPlot1.Plot.XLabel(SelectedXColumn);
-        avaPlot1.Plot.YLabel("Valeurs");
+        avaPlot1.Plot.YLabel(SelectedYColumn);
 
         avaPlot1.Plot.Axes.AutoScale();
         avaPlot1.Refresh();

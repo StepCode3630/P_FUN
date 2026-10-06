@@ -26,7 +26,6 @@ namespace PlotThoseLines.Views
                 .ToList();
 
             XColumnComboBox.ItemsSource = _columns;
-            //YColumnComboBox.ItemsSource = _columns;
 
             if (_columns.Count > 0)
             {
@@ -39,8 +38,8 @@ namespace PlotThoseLines.Views
         {
             string plotName = PlotNameTextBox.Text?.Trim() ?? string.Empty;
 
-            string? xColumn = XColumnComboBox.SelectedItem as string;
-            //string? yColumn = YColumnComboBox.SelectedItem as string;
+            string? xColumn = XColumnComboBox.SelectedItem as string ?? string.Empty;
+            string? yColumn = YColumnTextBox.Text?.Trim() ?? string.Empty;
 
             //if (string.IsNullOrWhiteSpace(xColumn) /*|| string.IsNullOrWhiteSpace(yColumn))*/
             //{
@@ -68,7 +67,7 @@ namespace PlotThoseLines.Views
             {
                 PlotName = plotName,
                 XColumn = xColumn,
-                //YColumn = yColumn,
+                YColumn = yColumn,
             };
 
             Close(result);
