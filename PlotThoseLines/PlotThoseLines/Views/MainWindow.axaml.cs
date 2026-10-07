@@ -29,10 +29,15 @@ public partial class MainWindow : Window
 {
     public ObservableCollection<Dictionary<string, string>> Rows { get; } = new();
     public ObservableCollection<string> AvailableColumns { get; } = new();
+
+    public ObservableCollection<ColumnToggle> ColumnToggles { get; } =
+        new() { new ColumnToggle("Courbe test 1"), new ColumnToggle("Courbe test 2") };
+
     public string? SelectedXColumn { get; set; }
     public string? SelectedYColumn { get; set; }
     private List<double> _xs = new();
     private List<double> _ys = new();
+
 
     private async Task<PlotSelectResult?> ShowOptions()
     {
@@ -80,8 +85,10 @@ public partial class MainWindow : Window
         // }
 
         // filtrer les colonnes vides et les ajouter à AvailableColumns
-        headers.Where(header => !string.IsNullOrWhiteSpace(header)).ToList().ForEach(header => AvailableColumns.Add(header));
-
+        headers
+            .Where(header => !string.IsNullOrWhiteSpace(header))
+            .ToList()
+            .ForEach(header => AvailableColumns.Add(header));
 
         while (csv.Read())
         {
@@ -89,8 +96,10 @@ public partial class MainWindow : Window
             // foreach (string header in headers)
             //     row[header] = csv.GetField(header) ?? string.Empty;
 
-            var row = headers.ToDictionary(header => header, header => csv.GetField(header) ?? string.Empty);
-
+            var row = headers.ToDictionary(
+                header => header,
+                header => csv.GetField(header) ?? string.Empty
+            );
 
             Rows.Add(row);
         }
@@ -104,7 +113,6 @@ public partial class MainWindow : Window
 
     private void PreparePlotData(string xColumn, string yColumn)
     {
-
         _xs.Clear();
         _ys.Clear();
 
@@ -137,7 +145,14 @@ public partial class MainWindow : Window
         }
 
         // WIP
-        // Rows.Where(row => !double.TryParse(row[xColumn], NumberStyles.Float, CultureInfo.InvariantCulture, out double x) || !double.TryParse(row[yColumn], NumberStyles.Float, CultureInfo.InvariantCulture, out double y))
+        // Rows.
+        // Where(row => !double.TryParse(row[xColumn], NumberStyles.Float, CultureInfo.InvariantCulture, out double x) || !double.TryParse(row[yColumn], NumberStyles.Float, CultureInfo.InvariantCulture, out double y))
+
+        //var data1=new List<string>() { "1","2","3"};
+        //_xs = data1
+        //    .Where(numberAsString => numberAsString.Equals("1"))
+        //    .Select(numberasString => Convert.ToDouble(numberasString))
+        //    .ToList();
     }
 
     private async void OnAddList(object? sender, RoutedEventArgs args)
@@ -176,31 +191,39 @@ public partial class MainWindow : Window
         SelectedXColumn = options.XColumn;
         SelectedYColumn = options.YColumn;
 
-
         InitializePlot(options.PlotName);
     }
 
     private void InitializePlot(string plotName)
     {
-
         AvaPlot? avaPlot1 = this.FindControl<AvaPlot>("AvaPlot1");
-
 
         avaPlot1.Plot.Clear();
 
+        var _viewModel = (MainViewModel)DataContext;
 
 
+        _viewModel.ColumnToggles.Clear();
         foreach (string ycolumn in AvailableColumns)
         {
-
             if (ycolumn == SelectedXColumn)
                 continue;
 
             PreparePlotData(SelectedXColumn, ycolumn);
 
-
             var scatter = avaPlot1.Plot.Add.Scatter(_xs.ToArray(), _ys.ToArray());
             scatter.LegendText = ycolumn;
+
+            _viewModel.ColumnToggles.Add(
+                new ColumnToggle(ycolumn)
+                {
+                    VisibilityChanged = visible =>
+                    {
+                        scatter.IsVisible = visible;
+                        avaPlot1.Refresh();
+                    },
+                }
+            );
         }
 
         avaPlot1.Plot.ShowLegend(Alignment.UpperLeft, Orientation.Vertical);

@@ -21,8 +21,8 @@
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
     <vm:MainViewModel />
   </Design.DataContext>
-  <Grid RowDefinitions="Auto,*">
-    <!-- Header -->
+  <Grid RowDefinitions="Auto,Auto,*">
+    <!-- En-tête -->
     <Border Grid.Row="0" Padding="12" Background="#252526">
       <StackPanel
         VerticalAlignment="Center"
@@ -45,15 +45,51 @@
                 </ControlTheme>
               </MenuFlyout.ItemContainerTheme>
             </MenuFlyout>
-
           </Button.Flyout>
         </Button>
-          <Button Content="Ajouter une liste" Click="OnAddList" />
+
+        <Button Content="Ajouter une liste" Click="OnAddList" />
         <Button Content="Aide" />
       </StackPanel>
     </Border>
 
-    <!-- Graphique ScottPlot -->
-    <ScottPlot:AvaPlot Grid.Row="1" Name="AvaPlot1" />
+    <ItemsControl Grid.Row="1" ItemsSource="{Binding ColumnToggles}">
+      <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+          <WrapPanel Orientation="Horizontal" />
+        </ItemsPanelTemplate>
+      </ItemsControl.ItemsPanel>
+
+      <ItemsControl.ItemTemplate>
+        <DataTemplate x:DataType="vm:ColumnToggle">
+          <ToggleButton
+            Content="{Binding Name}"
+            IsChecked="{Binding IsVisible, Mode=TwoWay}"
+            Margin="0,0,8,8"
+            MinWidth="90"
+            CornerRadius="16"
+            Background="#263449"
+            BorderBrush="#465A73"
+            BorderThickness="1"
+            Foreground="#DCE6F2"
+          >
+            <ToggleButton.Styles>
+              <Style Selector="ToggleButton:checked">
+                <Setter Property="Background" Value="#2878D0" />
+                <Setter Property="BorderBrush" Value="#55A6FF" />
+                <Setter Property="Foreground" Value="White" />
+              </Style>
+
+              <Style Selector="ToggleButton:pointerover">
+                <Setter Property="BorderBrush" Value="#8CC5FF" />
+              </Style>
+            </ToggleButton.Styles>
+          </ToggleButton>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+
+    <!-- Graphique -->
+    <ScottPlot:AvaPlot Grid.Row="2" Name="AvaPlot1" />
   </Grid>
 </Window>
