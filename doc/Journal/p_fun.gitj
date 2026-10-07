@@ -164,6 +164,36 @@
       "duration": 10,
       "status": "Done",
       "author": "StepCode3630"
+    },
+    {
+      "id": "70780910-d843-4460-bb65-d5bfe050b8a9",
+      "type": "commitless",
+      "name": "learn: recherche toogle en axaml",
+      "description": "",
+      "date": "2026-10-07T13:10",
+      "duration": 30,
+      "status": "Done",
+      "author": "StepCode3630"
+    },
+    {
+      "id": "249b5e29-17e3-4e2e-aa6d-567127ff0944",
+      "type": "commitless",
+      "name": "chore: debuging pourquoi les toogles ne s'affichaient pas",
+      "description": "",
+      "date": "2026-10-07T11:40:00.000Z",
+      "duration": 20,
+      "status": "Done",
+      "author": "StepCode3630"
+    },
+    {
+      "id": "4bd45bc3-2459-4f9a-8611-055a86985bdf",
+      "type": "commitless",
+      "name": "doc: maj jdt",
+      "description": "",
+      "date": "2026-10-07T16:34",
+      "duration": 5,
+      "status": "Done",
+      "author": "StepCode3630"
     }
   ]
 }
