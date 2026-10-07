@@ -31,6 +31,29 @@
         Spacing="8"
       >
         <TextBlock>Plot those lines</TextBlock>
+        <Border
+          Padding="16"
+          Background="#111A2B"
+          BorderBrush="#243147"
+          BorderThickness="1"
+          CornerRadius="12"
+        >
+          <StackPanel Spacing="12">
+            <TextBlock Text="Période" FontSize="14" FontWeight="SemiBold" Foreground="#F1F5F9" />
+
+            <Grid ColumnDefinitions="*,16,*">
+              <StackPanel Grid.Column="0" Spacing="6">
+                <TextBlock Text="Du" FontSize="12" Foreground="#94A3B8" />
+                <DatePicker SelectedDate="{Binding startDate}"  DayVisible="False" MonthVisible="False"  />
+              </StackPanel>
+
+              <StackPanel Grid.Column="2" Spacing="6">
+                <TextBlock Text="Au" FontSize="12" Foreground="#94A3B8" />
+                <DatePicker SelectedDate="{Binding endDate}"  DayVisible="False" MonthVisible="False" />
+              </StackPanel>
+            </Grid>
+          </StackPanel>
+        </Border>
 
         <Button Content="Listes">
           <Button.Flyout>

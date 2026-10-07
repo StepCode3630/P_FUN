@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Markup;
-using System.Xml.Linq;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CsvHelper;
 using CsvHelper.Configuration;
 using PlotThoseLines.MyClass;
@@ -20,6 +12,15 @@ using ScottPlot.ArrowShapes;
 using ScottPlot.Avalonia;
 using ScottPlot.Colormaps;
 using ScottPlot.Plottables;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Markup;
+using System.Xml.Linq;
 using Tmds.DBus.Protocol;
 using static SkiaSharp.HarfBuzz.SKShaper;
 
@@ -37,6 +38,12 @@ public partial class MainWindow : Window
     public string? SelectedYColumn { get; set; }
     private List<double> _xs = new();
     private List<double> _ys = new();
+
+    [ObservableProperty]
+    private DateTimeOffset? startDate;
+
+    [ObservableProperty]
+    private DateTimeOffset? endDate;
 
 
     private async Task<PlotSelectResult?> ShowOptions()
