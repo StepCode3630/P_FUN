@@ -30,6 +30,7 @@ public partial class MainWindow : Window
 {
     public ObservableCollection<Dictionary<string, string>> Rows { get; } = new();
     public ObservableCollection<string> AvailableColumns { get; } = new();
+    public ObservableCollection<string> FiltersDateList { get; } = new();
 
     public ObservableCollection<ColumnToggle> ColumnToggles { get; } =
         new() { new ColumnToggle("Courbe test 1"), new ColumnToggle("Courbe test 2") };
@@ -38,6 +39,19 @@ public partial class MainWindow : Window
     public string? SelectedYColumn { get; set; }
     private List<double> _xs = new();
     private List<double> _ys = new();
+
+    public void ApplyFilter_Click(object? sender, RoutedEventArgs e)
+    {
+        var _viewModel = (MainViewModel)DataContext;
+
+        string startDate = _viewModel.StartDate?.ToString("yyyy") ?? string.Empty;
+        string endDate = _viewModel.EndDate?.ToString("yyyy") ?? string.Empty;
+
+        Filter filter = new Filter(startDate, endDate);
+
+        FiltersDateList.Add(filter.ToString());
+        Console.WriteLine($"Filter applied: {filter}");
+    }
 
     private async Task<PlotSelectResult?> ShowOptions()
     {
@@ -50,6 +64,10 @@ public partial class MainWindow : Window
 
     private void ImportCSV(string filePath)
     {
+        var viewModel = (MainViewModel)DataContext;
+        viewModel.HasYearRange = false;
+        viewModel.StartDate = null;
+        viewModel.EndDate = null;
         Rows.Clear();
         AvailableColumns.Clear();
         SelectedXColumn = null;
@@ -202,6 +220,8 @@ public partial class MainWindow : Window
 
         var _viewModel = (MainViewModel)DataContext;
 
+        // Use the X values actually plotted, rather than the padded axis limits.
+        var plottedYears = new List<double>();
         _viewModel.ColumnToggles.Clear();
         foreach (string ycolumn in AvailableColumns)
         {
@@ -209,6 +229,7 @@ public partial class MainWindow : Window
                 continue;
 
             PreparePlotData(SelectedXColumn, ycolumn);
+            plottedYears.AddRange(_xs);
 
             var scatter = avaPlot1.Plot.Add.Scatter(_xs.ToArray(), _ys.ToArray());
             scatter.LegendText = ycolumn;
@@ -225,6 +246,8 @@ public partial class MainWindow : Window
             );
         }
 
+        UpdateYearRange(plottedYears);
+
         avaPlot1.Plot.ShowLegend(Alignment.UpperLeft, Orientation.Vertical);
         avaPlot1.Plot.Title(plotName);
         avaPlot1.Plot.XLabel(SelectedXColumn);
@@ -232,6 +255,34 @@ public partial class MainWindow : Window
 
         avaPlot1.Plot.Axes.AutoScale();
         avaPlot1.Refresh();
+    }
+
+    private void UpdateYearRange(List<double> years)
+    {
+        var viewModel = (MainViewModel)DataContext;
+        viewModel.HasYearRange = false;
+        viewModel.StartDate = null;
+        viewModel.EndDate = null;
+
+        // A DatePicker can only represent whole years from 1 to 9999.
+        if (years.Count == 0 || years.Any(year =>
+                !double.IsFinite(year) || year < 1 || year > 9999 || year != Math.Truncate(year)))
+            return;
+
+        var minimum = new DateTimeOffset((int)years.Min(), 1, 1, 0, 0, 0, TimeSpan.Zero);
+        var maximum = new DateTimeOffset((int)years.Max(), 1, 1, 0, 0, 0, TimeSpan.Zero);
+
+        // Expand the old bounds first so a new range never temporarily crosses them.
+        if (minimum > viewModel.MaximumYear)
+            viewModel.MaximumYear = maximum;
+        if (maximum < viewModel.MinimumYear)
+            viewModel.MinimumYear = minimum;
+
+        viewModel.MinimumYear = minimum;
+        viewModel.MaximumYear = maximum;
+        viewModel.StartDate = minimum;
+        viewModel.EndDate = maximum;
+        viewModel.HasYearRange = true;
     }
 
     public MainWindow()

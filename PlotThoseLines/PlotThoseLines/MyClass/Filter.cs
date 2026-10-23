@@ -5,29 +5,29 @@ namespace PlotThoseLines.MyClass;
 
 public class Filter : ObservableObject
 {
-    private DateTimeOffset? _startDate;
-    private DateTimeOffset? _endDate;
+    private string? _startDate;
+    private string? _endDate;
 
-    public DateTimeOffset? StartDate
+    public string? StartDate
     {
         get => _startDate;
         set => SetProperty(ref _startDate, value);
     }
 
-    public DateTimeOffset? EndDate
+    public string? EndDate
     {
         get => _endDate;
         set => SetProperty(ref _endDate, value);
     }
 
-    public Filter(DateTimeOffset? startDate, DateTimeOffset? endDate)
+    public Filter(string? startDate, string? endDate)
     {
         _startDate = startDate;
         _endDate = endDate;
     }
 
-    public void toString()
+    public override string ToString()
     {
-        Console.WriteLine($"Start Date: {StartDate}, End Date: {EndDate}");
+        return $"Start Date: {StartDate}, End Date: {EndDate}";
     }
 }

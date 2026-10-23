@@ -15,10 +15,10 @@
   xmlns:ScottPlot="clr-namespace:ScottPlot.Avalonia;assembly=ScottPlot.Avalonia"
   Icon="/Assets/avalonia-logo.ico"
   Title="PlotThoseLines"
->
+  >
   <Design.DataContext>
     <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
     <vm:MainViewModel />
   </Design.DataContext>
   <Grid RowDefinitions="Auto,Auto,*">
@@ -29,7 +29,7 @@
         HorizontalAlignment="Center"
         Orientation="Horizontal"
         Spacing="8"
-      >
+        >
         <TextBlock>Plot those lines</TextBlock>
         <Border
           Padding="16"
@@ -37,20 +37,27 @@
           BorderBrush="#243147"
           BorderThickness="1"
           CornerRadius="12"
-        >
+          >
           <StackPanel Spacing="12">
             <TextBlock Text="Période" FontSize="14" FontWeight="SemiBold" Foreground="#F1F5F9" />
 
-            <Grid ColumnDefinitions="*,16,*">
+            <Grid ColumnDefinitions="Auto,16,Auto,24,Auto" IsEnabled="{Binding HasYearRange}">
               <StackPanel Grid.Column="0" Spacing="6">
-                <TextBlock Text="Du" FontSize="12" Foreground="#94A3B8" />
-                <DatePicker SelectedDate="{Binding startDate}"  DayVisible="False" MonthVisible="False"  />
+                <TextBlock Text="De l’année" FontSize="12" Foreground="#94A3B8" />
+                <DatePicker SelectedDate="{Binding StartDate, Mode=TwoWay}"
+                            MinYear="{Binding MinimumYear}" MaxYear="{Binding MaximumYear}"
+                            DayVisible="False" MonthVisible="False" />
               </StackPanel>
 
               <StackPanel Grid.Column="2" Spacing="6">
-                <TextBlock Text="Au" FontSize="12" Foreground="#94A3B8" />
-                <DatePicker SelectedDate="{Binding endDate}"  DayVisible="False" MonthVisible="False" />
+                <TextBlock Text="À l’année" FontSize="12" Foreground="#94A3B8" />
+                <DatePicker SelectedDate="{Binding EndDate, Mode=TwoWay}"
+                            MinYear="{Binding MinimumYear}" MaxYear="{Binding MaximumYear}"
+                            DayVisible="False" MonthVisible="False" />
               </StackPanel>
+
+              <Button Grid.Column="4" VerticalAlignment="Bottom"
+                      Content="Appliquer les filtres" Click="ApplyFilter_Click" />
             </Grid>
           </StackPanel>
         </Border>
@@ -63,7 +70,7 @@
                   TargetType="MenuItem"
                   BasedOn="{StaticResource {x:Type MenuItem}}"
                   x:DataType="myclass:ListeMenuItem"
-                >
+                  >
                   <Setter Property="Header" Value="{Binding Nom}" />
                 </ControlTheme>
               </MenuFlyout.ItemContainerTheme>
@@ -95,7 +102,7 @@
             BorderBrush="#465A73"
             BorderThickness="1"
             Foreground="#DCE6F2"
-          >
+            >
             <ToggleButton.Styles>
               <Style Selector="ToggleButton:checked">
                 <Setter Property="Background" Value="#2878D0" />
