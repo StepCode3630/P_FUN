@@ -42,6 +42,8 @@ public partial class MainWindow : Window
 
     public void ApplyFilter_Click(object? sender, RoutedEventArgs e)
     {
+        FiltersDateList.Clear();
+
         var _viewModel = (MainViewModel)DataContext;
 
         if (!_viewModel.StartDate.HasValue || !_viewModel.EndDate.HasValue)
@@ -50,7 +52,7 @@ public partial class MainWindow : Window
             return;
         }
 
-        if (_viewModel.StartDate >= _viewModel.EndDate)
+        if (_viewModel.StartDate > _viewModel.EndDate)
         {
             Console.WriteLine("Start date must be earlier than end date.");
             return;
@@ -64,12 +66,15 @@ public partial class MainWindow : Window
         //     FiltersDateList.Add(Convert.ToString(i));
         // }
 
-        Enumerable.Range(startDate, endDate - startDate)
+        Enumerable
+            .Range(startDate, endDate - startDate)
             .Select(year => year.ToString())
             .ToList()
             .ForEach(year => FiltersDateList.Add(year));
 
         Console.WriteLine($"Filter applied: {string.Join(", ", FiltersDateList)}");
+
+        InitializePlot("jsp", false);
     }
 
     private async Task<PlotSelectResult?> ShowOptions()
@@ -83,6 +88,8 @@ public partial class MainWindow : Window
 
     private void ImportCSV(string filePath)
     {
+        FiltersDateList.Clear();
+
         var viewModel = (MainViewModel)DataContext;
         viewModel.HasYearRange = false;
         viewModel.StartDate = null;
@@ -177,8 +184,11 @@ public partial class MainWindow : Window
             if (!xIsValid || !yIsValid)
                 continue;
 
-            _xs.Add(x);
-            _ys.Add(y);
+            if (FiltersDateList.Count == 0 || FiltersDateList.Contains(Convert.ToString(x)))
+            {
+                _xs.Add(x);
+                _ys.Add(y);
+            }
         }
 
         // WIP
@@ -228,10 +238,10 @@ public partial class MainWindow : Window
         SelectedXColumn = options.XColumn;
         SelectedYColumn = options.YColumn;
 
-        InitializePlot(options.PlotName);
+        InitializePlot(options.PlotName, true);
     }
 
-    private void InitializePlot(string plotName)
+    private void InitializePlot(string plotName, bool initializeDateRange)
     {
         AvaPlot? avaPlot1 = this.FindControl<AvaPlot>("AvaPlot1");
 
@@ -265,7 +275,8 @@ public partial class MainWindow : Window
             );
         }
 
-        UpdateYearRange(plottedYears);
+        if (initializeDateRange)
+            UpdateYearRange(plottedYears);
 
         avaPlot1.Plot.ShowLegend(Alignment.UpperLeft, Orientation.Vertical);
         avaPlot1.Plot.Title(plotName);
