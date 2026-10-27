@@ -59,10 +59,15 @@ public partial class MainWindow : Window
         var startDate = _viewModel.StartDate.Value.Year;
         var endDate = _viewModel.EndDate.Value.Year;
 
-        for (int i = startDate; i < endDate; i++)
-        {
-            FiltersDateList.Add(Convert.ToString(i));
-        }
+        // for (int i = startDate; i < endDate; i++)
+        // {
+        //     FiltersDateList.Add(Convert.ToString(i));
+        // }
+
+        Enumerable.Range(startDate, endDate - startDate)
+            .Select(year => year.ToString())
+            .ToList()
+            .ForEach(year => FiltersDateList.Add(year));
 
         Console.WriteLine($"Filter applied: {string.Join(", ", FiltersDateList)}");
     }
