@@ -44,13 +44,27 @@ public partial class MainWindow : Window
     {
         var _viewModel = (MainViewModel)DataContext;
 
-        string startDate = _viewModel.StartDate?.ToString("yyyy") ?? string.Empty;
-        string endDate = _viewModel.EndDate?.ToString("yyyy") ?? string.Empty;
+        if (!_viewModel.StartDate.HasValue || !_viewModel.EndDate.HasValue)
+        {
+            Console.WriteLine("Select a start date and an end date.");
+            return;
+        }
 
-        Filter filter = new Filter(startDate, endDate);
+        if (_viewModel.StartDate >= _viewModel.EndDate)
+        {
+            Console.WriteLine("Start date must be earlier than end date.");
+            return;
+        }
 
-        FiltersDateList.Add(filter.ToString());
-        Console.WriteLine($"Filter applied: {filter}");
+        var startDate = _viewModel.StartDate.Value.Year;
+        var endDate = _viewModel.EndDate.Value.Year;
+
+        for (int i = startDate; i < endDate; i++)
+        {
+            FiltersDateList.Add(Convert.ToString(i));
+        }
+
+        Console.WriteLine($"Filter applied: {string.Join(", ", FiltersDateList)}");
     }
 
     private async Task<PlotSelectResult?> ShowOptions()
@@ -265,8 +279,12 @@ public partial class MainWindow : Window
         viewModel.EndDate = null;
 
         // A DatePicker can only represent whole years from 1 to 9999.
-        if (years.Count == 0 || years.Any(year =>
-                !double.IsFinite(year) || year < 1 || year > 9999 || year != Math.Truncate(year)))
+        if (
+            years.Count == 0
+            || years.Any(year =>
+                !double.IsFinite(year) || year < 1 || year > 9999 || year != Math.Truncate(year)
+            )
+        )
             return;
 
         var minimum = new DateTimeOffset((int)years.Min(), 1, 1, 0, 0, 0, TimeSpan.Zero);
