@@ -86,7 +86,7 @@ public partial class MainWindow : Window
         return result;
     }
 
-    private void ImportCSV(string filePath)
+    public void ImportCSV(string filePath)
     {
         FiltersDateList.Clear();
 
@@ -155,7 +155,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private void PreparePlotData(string xColumn, string yColumn)
+    public void PreparePlotData(string xColumn, string yColumn)
     {
         _xs.Clear();
         _ys.Clear();
