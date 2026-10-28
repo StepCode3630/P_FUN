@@ -194,6 +194,29 @@
       "duration": 5,
       "status": "Done",
       "author": "StepCode3630"
+    },
+    {
+      "id": "4c0a31ac-bacf-4777-8477-be5c100cef46",
+      "type": "commitless",
+      "name": "learn: comment faire des test xUnit",
+      "description": "",
+      "date": "2026-10-28T12:10:00.000Z",
+      "duration": 35,
+      "status": "Done",
+      "author": "StepCode3630"
+    },
+    {
+      "id": "bcea8d9f-59a7-418d-8d04-95d814b96c42",
+      "type": "commitpatch",
+      "sha": "e30f10728657bcdf086eab3716a52047cc312034",
+      "url": "https://github.com/StepCode3630/P_FUN/commit/e30f10728657bcdf086eab3716a52047cc312034",
+      "name": "feat(filter): séléction des dates données par l'utilisateur et les log",
+      "description": "",
+      "date": "2026-10-23T21:57:00.000Z",
+      "duration": 60,
+      "status": "Done",
+      "author": "StepCode3630",
+      "patch": true
     }
   ]
 }
