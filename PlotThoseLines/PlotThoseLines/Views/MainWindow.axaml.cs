@@ -163,43 +163,33 @@ public partial class MainWindow : Window
         if (yColumn == null & xColumn == null)
             throw new Exception();
 
-        foreach (var row in Rows)
-        {
-            string xText = row[xColumn];
-            string yText = row[yColumn];
-
-            bool xIsValid = double.TryParse(
-                xText,
-                NumberStyles.Float,
-                CultureInfo.InvariantCulture,
-                out double x
-            );
-            bool yIsValid = double.TryParse(
-                yText,
-                NumberStyles.Float,
-                CultureInfo.InvariantCulture,
-                out double y
-            );
-
-            if (!xIsValid || !yIsValid)
-                continue;
-
-            if (FiltersDateList.Count == 0 || FiltersDateList.Contains(Convert.ToString(x)))
+        var points = Rows.Select(row =>
             {
-                _xs.Add(x);
-                _ys.Add(y);
-            }
-        }
+                bool xIsValid = double.TryParse(
+                    row[xColumn],
+                    NumberStyles.Float,
+                    CultureInfo.InvariantCulture,
+                    out double x
+                );
 
-        // WIP
-        // Rows.
-        // Where(row => !double.TryParse(row[xColumn], NumberStyles.Float, CultureInfo.InvariantCulture, out double x) || !double.TryParse(row[yColumn], NumberStyles.Float, CultureInfo.InvariantCulture, out double y))
+                bool yIsValid = double.TryParse(
+                    row[yColumn],
+                    NumberStyles.Float,
+                    CultureInfo.InvariantCulture,
+                    out double y
+                );
 
-        //var data1=new List<string>() { "1","2","3"};
-        //_xs = data1
-        //    .Where(numberAsString => numberAsString.Equals("1"))
-        //    .Select(numberasString => Convert.ToDouble(numberasString))
-        //    .ToList();
+                return (xIsValid, yIsValid, x, y);
+            })
+            .Where(p =>
+                p.xIsValid
+                && p.yIsValid
+                && (FiltersDateList.Count == 0 || FiltersDateList.Contains(Convert.ToString(p.x)))
+            )
+            .ToList();
+
+        _xs.AddRange(points.Select(p => p.x));
+        _ys.AddRange(points.Select(p => p.y));
     }
 
     private async void OnAddList(object? sender, RoutedEventArgs args)
@@ -252,28 +242,50 @@ public partial class MainWindow : Window
         // Use the X values actually plotted, rather than the padded axis limits.
         var plottedYears = new List<double>();
         _viewModel.ColumnToggles.Clear();
-        foreach (string ycolumn in AvailableColumns)
-        {
-            if (ycolumn == SelectedXColumn)
-                continue;
+        //foreach (string ycolumn in AvailableColumns)
+        //{
+        //    if (ycolumn == SelectedXColumn)
+        //        continue;
 
-            PreparePlotData(SelectedXColumn, ycolumn);
-            plottedYears.AddRange(_xs);
+        //    PreparePlotData(SelectedXColumn, ycolumn);
+        //    plottedYears.AddRange(_xs);
 
-            var scatter = avaPlot1.Plot.Add.Scatter(_xs.ToArray(), _ys.ToArray());
-            scatter.LegendText = ycolumn;
+        //    var scatter = avaPlot1.Plot.Add.Scatter(_xs.ToArray(), _ys.ToArray());
+        //    scatter.LegendText = ycolumn;
 
-            _viewModel.ColumnToggles.Add(
-                new ColumnToggle(ycolumn)
-                {
-                    VisibilityChanged = visible =>
+        //    _viewModel.ColumnToggles.Add(
+        //        new ColumnToggle(ycolumn)
+        //        {
+        //            VisibilityChanged = visible =>
+        //            {
+        //                scatter.IsVisible = visible;
+        //                avaPlot1.Refresh();
+        //            },
+        //        }
+        //    );
+        //}
+        AvailableColumns
+            .Where(yColumn => yColumn != SelectedXColumn)
+            .ToList()
+            .ForEach(yColumn =>
+            {
+                PreparePlotData(SelectedXColumn, yColumn);
+                plottedYears.AddRange(_xs);
+
+                var scatter = avaPlot1.Plot.Add.Scatter(_xs.ToArray(), _ys.ToArray());
+                scatter.LegendText = yColumn;
+
+                _viewModel.ColumnToggles.Add(
+                    new ColumnToggle(yColumn)
                     {
-                        scatter.IsVisible = visible;
-                        avaPlot1.Refresh();
-                    },
-                }
-            );
-        }
+                        VisibilityChanged = visible =>
+                        {
+                            scatter.IsVisible = visible;
+                            avaPlot1.Refresh();
+                        },
+                    }
+                );
+            });
 
         if (initializeDateRange)
             UpdateYearRange(plottedYears);
