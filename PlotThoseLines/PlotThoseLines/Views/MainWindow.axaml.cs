@@ -55,6 +55,15 @@ public partial class MainWindow : Window
         if (_viewModel.StartDate > _viewModel.EndDate)
         {
             Console.WriteLine("Start date must be earlier than end date.");
+//     return;
+        // }
+
+        var startDate = Convert.ToInt32(_viewModel?.StartDate);
+        var endDate = Convert.ToInt32(_viewModel?.EndDate);
+
+        if (endDate != startDate && !endDate.IsABiggerDateThan(startDate))
+        {
+            Console.WriteLine("L'année de fin doit être supérieure ou égale à celle du début");
             return;
         }
 
