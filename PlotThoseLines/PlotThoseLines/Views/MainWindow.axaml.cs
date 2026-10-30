@@ -69,6 +69,11 @@ public partial class MainWindow : Window
             return;
         }
 
+        if (!endDate.IsAValidYear() || !startDate.IsAValidYear())
+        {
+            Console.WriteLine("L'année doit être valide");
+            return;
+        }
         // for (int i = startDate; i < endDate; i++)
         // {
         //     FiltersDateList.Add(Convert.ToString(i));

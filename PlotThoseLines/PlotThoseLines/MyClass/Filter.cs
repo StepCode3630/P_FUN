@@ -30,7 +30,6 @@ public class Filter : ObservableObject
     {
         return $"Start Date: {StartDate}, End Date: {EndDate}";
     }
-
 }
 
 public static class FilterExtensions
@@ -38,5 +37,10 @@ public static class FilterExtensions
     public static bool IsABiggerDateThan(this int date, int otherDate)
     {
         return date > otherDate;
+    }
+
+    public static bool IsAValidYear(this int date)
+    {
+        return date > 0 && date < 9999;
     }
 }
