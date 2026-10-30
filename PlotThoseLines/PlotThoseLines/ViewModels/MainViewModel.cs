@@ -12,15 +12,16 @@ public partial class MainViewModel : ViewModelBase
     public ObservableCollection<ColumnToggle> ColumnToggles { get; } = new();
 
     [ObservableProperty]
-    private DateTimeOffset? startDate;
+    private decimal startDate;
 
     [ObservableProperty]
-    private DateTimeOffset? endDate;
-    [ObservableProperty]
-    private DateTimeOffset minimumYear = new(1, 1, 1, 0, 0, 0, TimeSpan.Zero);
+    private decimal endDate;
 
     [ObservableProperty]
-    private DateTimeOffset maximumYear = new(9999, 1, 1, 0, 0, 0, TimeSpan.Zero);
+    private decimal minimumYear;
+
+    [ObservableProperty]
+    private decimal maximumYear;
 
     [ObservableProperty]
     private bool hasYearRange;

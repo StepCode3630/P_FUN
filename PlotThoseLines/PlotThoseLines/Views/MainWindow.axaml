@@ -44,16 +44,24 @@
             <Grid ColumnDefinitions="Auto,16,Auto,24,Auto" IsEnabled="{Binding HasYearRange}">
               <StackPanel Grid.Column="0" Spacing="6">
                 <TextBlock Text="De l’année" FontSize="12" Foreground="#94A3B8" />
-                <DatePicker SelectedDate="{Binding StartDate, Mode=TwoWay}"
-                            MinYear="{Binding MinimumYear}" MaxYear="{Binding MaximumYear}"
-                            DayVisible="False" MonthVisible="False" />
+                <NumericUpDown Classes="yearInput"
+                               Value="{Binding StartDate, Mode=TwoWay}"
+                               Minimum="{Binding MinimumYear}"
+                               Maximum="{Binding MaximumYear}"
+                               AutomationProperties.Name="Année de début"
+                              FormatString="0"
+                               ToolTip.Tip="Choisissez la première année à afficher." />
               </StackPanel>
 
               <StackPanel Grid.Column="2" Spacing="6">
                 <TextBlock Text="À l’année" FontSize="12" Foreground="#94A3B8" />
-                <DatePicker SelectedDate="{Binding EndDate, Mode=TwoWay}"
-                            MinYear="{Binding MinimumYear}" MaxYear="{Binding MaximumYear}"
-                            DayVisible="False" MonthVisible="False" />
+                <NumericUpDown Classes="yearInput"
+                               Value="{Binding EndDate, Mode=TwoWay}"
+                               Minimum="{Binding MinimumYear}"
+                               Maximum="{Binding MaximumYear}"
+                               AutomationProperties.Name="Année de fin"
+                               FormatString="0"
+                               ToolTip.Tip="Choisissez la dernière année à afficher (incluse)." />
               </StackPanel>
 
               <Button Grid.Column="4" VerticalAlignment="Bottom"

@@ -46,16 +46,18 @@ public partial class MainWindow : Window
 
         var _viewModel = (MainViewModel)DataContext;
 
-        if (!_viewModel.StartDate.HasValue || !_viewModel.EndDate.HasValue)
-        {
-            Console.WriteLine("Select a start date and an end date.");
-            return;
-        }
+        // if (!_viewModel.StartDate.HasValue || !_viewModel.EndDate.HasValue)
+        // {
+        //     Console.WriteLine("Select a start date and an end date.");
+        //     return;
+        // }
 
-        if (_viewModel.StartDate > _viewModel.EndDate)
-        {
-            Console.WriteLine("Start date must be earlier than end date.");
-//     return;
+        // if (
+        //     Filter.IsABiggerDateThan(_viewModel.StartDate.Value.Year, _viewModel.EndDate.Value.Year)
+        // )
+        // {
+        //     Console.WriteLine("Start date must be earlier than end date.");
+        //     return;
         // }
 
         var startDate = Convert.ToInt32(_viewModel?.StartDate);
@@ -67,16 +69,13 @@ public partial class MainWindow : Window
             return;
         }
 
-        var startDate = _viewModel.StartDate.Value.Year;
-        var endDate = _viewModel.EndDate.Value.Year;
-
         // for (int i = startDate; i < endDate; i++)
         // {
         //     FiltersDateList.Add(Convert.ToString(i));
         // }
 
         Enumerable
-            .Range(startDate, endDate - startDate)
+            .Range(startDate, endDate - startDate + 1)
             .Select(year => year.ToString())
             .ToList()
             .ForEach(year => FiltersDateList.Add(year));
@@ -101,8 +100,8 @@ public partial class MainWindow : Window
 
         var viewModel = (MainViewModel)DataContext;
         viewModel.HasYearRange = false;
-        viewModel.StartDate = null;
-        viewModel.EndDate = null;
+        viewModel.StartDate = 0;
+        viewModel.EndDate = 0;
         Rows.Clear();
         AvailableColumns.Clear();
         SelectedXColumn = null;
@@ -312,10 +311,10 @@ public partial class MainWindow : Window
     {
         var viewModel = (MainViewModel)DataContext;
         viewModel.HasYearRange = false;
-        viewModel.StartDate = null;
-        viewModel.EndDate = null;
+        viewModel.StartDate = 0;
+        viewModel.EndDate = 0;
 
-        // A DatePicker can only represent whole years from 1 to 9999.
+        // Only enable the year filter for whole years from 1 to 9999.
         if (
             years.Count == 0
             || years.Any(year =>
@@ -324,8 +323,8 @@ public partial class MainWindow : Window
         )
             return;
 
-        var minimum = new DateTimeOffset((int)years.Min(), 1, 1, 0, 0, 0, TimeSpan.Zero);
-        var maximum = new DateTimeOffset((int)years.Max(), 1, 1, 0, 0, 0, TimeSpan.Zero);
+        var minimum = (decimal)years.Min();
+        var maximum = (decimal)years.Max();
 
         // Expand the old bounds first so a new range never temporarily crosses them.
         if (minimum > viewModel.MaximumYear)
