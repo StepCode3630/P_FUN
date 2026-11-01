@@ -33,6 +33,11 @@ namespace PlotThoseLines.Views
             }
         }
 
+        /// <summary>
+        /// Valide les options de tracé sélectionnées par l'utilisateur et ferme la fenêtre en renvoyant un objet PlotSelectResult contenant le nom du tracé, la colonne X et la colonne Y sélectionnées. Si aucune colonne n'est sélectionnée, des valeurs par défaut sont utilisées.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void ValidateOptions_Click(object? sender, RoutedEventArgs e)
         {
             string plotName = PlotNameTextBox.Text?.Trim() ?? string.Empty;
@@ -50,6 +55,11 @@ namespace PlotThoseLines.Views
             Close(result);
         }
 
+        /// <summary>
+        /// Annule les options de tracé et ferme la fenêtre.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CancelOptions_Click(object? sender, RoutedEventArgs e)
         {
             Close(null);

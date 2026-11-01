@@ -40,6 +40,11 @@ public partial class MainWindow : Window
     private List<double> _xs = new();
     private List<double> _ys = new();
 
+    /// <summary>
+    /// Applique les filtres de date sélectionnés par l'utilisateur et met à jour la liste FiltersDateList en conséquence. Si les dates sont invalides, un message d'erreur est affiché dans la console. Ensuite, la méthode InitializePlot est appelée pour mettre à jour le graphique avec les nouvelles données filtrées.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     public void ApplyFilter_Click(object? sender, RoutedEventArgs e)
     {
         FiltersDateList.Clear();
@@ -72,6 +77,10 @@ public partial class MainWindow : Window
         InitializePlot("jsp", false);
     }
 
+    /// <summary>
+    /// Affiche la fenêtre d'options de tracé et retourne les résultats sélectionnés par l'utilisateur.
+    /// </summary>
+    /// <returns></returns>
     private async Task<PlotSelectResult?> ShowOptions()
     {
         var columnNames = AvailableColumns.ToList();
@@ -81,6 +90,10 @@ public partial class MainWindow : Window
         return result;
     }
 
+    /// <summary>
+    /// Importer un fichier CSV, lire les en-têtes et les lignes, et remplir les collections Rows et AvailableColumns. Si le fichier est vide ou invalide, la méthode retourne sans effectuer d'opérations supplémentaires. Les colonnes vides sont filtrées et les deux premières colonnes disponibles sont sélectionnées par défaut pour l'axe X et l'axe Y.
+    /// </summary>
+    /// <param name="filePath"></param>
     public void ImportCSV(string filePath)
     {
         FiltersDateList.Clear();
@@ -138,6 +151,11 @@ public partial class MainWindow : Window
         }
     }
 
+    /// <summary>
+    /// Prépare les données de tracé en fonction des colonnes X et Y sélectionnées. Les valeurs valides sont extraites des lignes importées et stockées dans les listes _xs et _ys. Si les colonnes X ou Y sont nulles, une exception est levée. Les points invalides ou filtrés par la liste FiltersDateList sont ignorés.
+    /// </summary>
+    /// <param name="xColumn"></param>
+    /// <param name="yColumn"></param>
     public void PreparePlotData(string xColumn, string yColumn)
     {
         _xs.Clear();
@@ -175,6 +193,12 @@ public partial class MainWindow : Window
         _ys.AddRange(points.Select(p => p.y));
     }
 
+    /// <summary>
+    /// Ajoute une nouvelle liste de données à partir d'un fichier CSV sélectionné par l'utilisateur. La méthode ouvre un sélecteur de fichiers, lit le fichier CSV choisi, importe les données et met à jour le graphique avec les colonnes X et Y sélectionnées. Si aucune colonne n'est sélectionnée ou si le fichier est invalide, la méthode retourne sans effectuer d'opérations supplémentaires.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="args"></param>
+    /// <returns></returns>
     private async void OnAddList(object? sender, RoutedEventArgs args)
     {
         var customOptions = new FilePickerOpenOptions
@@ -214,6 +238,11 @@ public partial class MainWindow : Window
         InitializePlot(options.PlotName, true);
     }
 
+    /// <summary>
+    /// Initialise le graphique avec les données préparées et les colonnes sélectionnées. La méthode efface le graphique existant, ajoute de nouvelles séries de données pour chaque colonne Y disponible, configure les étiquettes et la légende, et ajuste l'échelle des axes. Si initializeDateRange est vrai, la plage d'années est mise à jour en fonction des valeurs tracées.
+    /// </summary>
+    /// <param name="plotName"></param>
+    /// <param name="initializeDateRange"></param>
     private void InitializePlot(string plotName, bool initializeDateRange)
     {
         AvaPlot? avaPlot1 = this.FindControl<AvaPlot>("AvaPlot1");
@@ -261,6 +290,10 @@ public partial class MainWindow : Window
         avaPlot1.Refresh();
     }
 
+    /// <summary>
+    /// Met à jour la plage d'années en fonction des valeurs tracées.
+    /// </summary>
+    /// <param name="years"></param>
     private void UpdateYearRange(List<double> years)
     {
         var viewModel = (MainViewModel)DataContext;
