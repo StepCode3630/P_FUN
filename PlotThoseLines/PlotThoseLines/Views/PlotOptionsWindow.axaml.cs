@@ -30,7 +30,6 @@ namespace PlotThoseLines.Views
             if (_columns.Count > 0)
             {
                 XColumnComboBox.SelectedIndex = 0;
-                //YColumnComboBox.SelectedIndex = _columns.Count > 1 ? 1 : 0;
             }
         }
 
@@ -40,28 +39,6 @@ namespace PlotThoseLines.Views
 
             string? xColumn = XColumnComboBox.SelectedItem as string ?? string.Empty;
             string? yColumn = YColumnTextBox.Text?.Trim() ?? string.Empty;
-
-            //if (string.IsNullOrWhiteSpace(xColumn) /*|| string.IsNullOrWhiteSpace(yColumn))*/
-            //{
-            //    Close(null);
-            //    return;
-            //}
-
-            //if (string.Equals(xColumn, /*yColumn,*/ StringComparison.OrdinalIgnoreCase))
-            //{
-            //    var fallback = _columns.FirstOrDefault(column =>
-            //        !string.Equals(column, xColumn, StringComparison.OrdinalIgnoreCase)
-            //    );
-
-            //    if (string.IsNullOrWhiteSpace(fallback))
-            //    {
-            //        Close(null);
-            //        return;
-            //    }
-
-            //    yColumn = fallback;
-            //    YColumnComboBox.SelectedItem = fallback;
-            //}
 
             var result = new PlotSelectResult
             {

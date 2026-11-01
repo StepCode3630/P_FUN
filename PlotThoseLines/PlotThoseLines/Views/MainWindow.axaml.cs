@@ -46,20 +46,6 @@ public partial class MainWindow : Window
 
         var _viewModel = (MainViewModel)DataContext;
 
-        // if (!_viewModel.StartDate.HasValue || !_viewModel.EndDate.HasValue)
-        // {
-        //     Console.WriteLine("Select a start date and an end date.");
-        //     return;
-        // }
-
-        // if (
-        //     Filter.IsABiggerDateThan(_viewModel.StartDate.Value.Year, _viewModel.EndDate.Value.Year)
-        // )
-        // {
-        //     Console.WriteLine("Start date must be earlier than end date.");
-        //     return;
-        // }
-
         var startDate = Convert.ToInt32(_viewModel?.StartDate);
         var endDate = Convert.ToInt32(_viewModel?.EndDate);
 
@@ -74,10 +60,6 @@ public partial class MainWindow : Window
             Console.WriteLine("L'année doit être valide");
             return;
         }
-        // for (int i = startDate; i < endDate; i++)
-        // {
-        //     FiltersDateList.Add(Convert.ToString(i));
-        // }
 
         Enumerable
             .Range(startDate, endDate - startDate + 1)
@@ -133,14 +115,6 @@ public partial class MainWindow : Window
         if (headers is null || headers.Length == 0)
             return;
 
-        // foreach (string header in headers)
-        // {
-        //     if (string.IsNullOrWhiteSpace(header))
-        //         continue;
-
-        //     AvailableColumns.Add(header);
-        // }
-
         // filtrer les colonnes vides et les ajouter à AvailableColumns
         headers
             .Where(header => !string.IsNullOrWhiteSpace(header))
@@ -149,10 +123,6 @@ public partial class MainWindow : Window
 
         while (csv.Read())
         {
-            //var row = new Dictionary<string, string>();
-            // foreach (string header in headers)
-            //     row[header] = csv.GetField(header) ?? string.Empty;
-
             var row = headers.ToDictionary(
                 header => header,
                 header => csv.GetField(header) ?? string.Empty
@@ -255,28 +225,7 @@ public partial class MainWindow : Window
         // Use the X values actually plotted, rather than the padded axis limits.
         var plottedYears = new List<double>();
         _viewModel.ColumnToggles.Clear();
-        //foreach (string ycolumn in AvailableColumns)
-        //{
-        //    if (ycolumn == SelectedXColumn)
-        //        continue;
 
-        //    PreparePlotData(SelectedXColumn, ycolumn);
-        //    plottedYears.AddRange(_xs);
-
-        //    var scatter = avaPlot1.Plot.Add.Scatter(_xs.ToArray(), _ys.ToArray());
-        //    scatter.LegendText = ycolumn;
-
-        //    _viewModel.ColumnToggles.Add(
-        //        new ColumnToggle(ycolumn)
-        //        {
-        //            VisibilityChanged = visible =>
-        //            {
-        //                scatter.IsVisible = visible;
-        //                avaPlot1.Refresh();
-        //            },
-        //        }
-        //    );
-        //}
         AvailableColumns
             .Where(yColumn => yColumn != SelectedXColumn)
             .ToList()
@@ -349,27 +298,5 @@ public partial class MainWindow : Window
         InitializeComponent();
 
         DataContext = new MainViewModel();
-
-        //ImportCSV(
-        //    //"/home/patricnystepan/Documents/Github/P_FUN/doc/Fichier import/production_electricite_complete_normalized.csv" ||
-        //    "C:\\Users\\pl77sbr\\source\\repos\\P_FUN\\doc\\Fichier import\\production_electricite_complete_normalized.csv"
-        //);
-
-        //AvaPlot avaPlot1 = this.Find<AvaPlot>("AvaPlot1");
-
-        //foreach (string yColumn in AvailableColumns)
-        //{
-        //    //On aime pas les années
-        //    if (yColumn == SelectedXColumn)
-        //        continue;
-
-        //    PreparePlotData(SelectedXColumn, yColumn);
-
-        //    var scatter = avaPlot1.Plot.Add.Scatter(_xs.ToArray(), _ys.ToArray());
-        //    scatter.LegendText = yColumn;
-        //}
-
-        //avaPlot1.Plot.ShowLegend(Alignment.UpperLeft, Orientation.Vertical);
-        //avaPlot1.Refresh();
     }
 }
