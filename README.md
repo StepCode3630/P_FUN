@@ -2,13 +2,13 @@
 
 ## Objectif
 
-Une application de grapgique où on peut importer des fichier csv et afficher les courbes
+Une application de graphique où on peut importer des fichier CSV et afficher les courbes
 
 ![app](image-1.png)
 
 ## Description du domaine
 
-Production en éléctricité en GWh en Suisse
+Production en électricité en GWh en Suisse
 Source: **Office fédéral de l'énergie, Statistique globale suisse de l'énergie** et script python pour atteindre 500 valeurs par séries
 
 ## Analyse fonctionnel
@@ -53,9 +53,9 @@ Dans ce cade du projet, j'ai utilisé l'AI pour divers raisons:
 - Comment utilisé une donnée que l'utilisateur ait renseigné dans un champ
 - Comment insérer une autre page axaml en cliquant depuis un bouton
 - Que MainViewModel sert de lien entre le axaml et cs
-- COmment mettre en place les toogles et donc d'afficher ou non un courbe
+- Comment mettre en place les toogles et donc d'afficher ou non un courbe
 
-En bref, je me suis aidé de l'IA pour mieux débugger, pour rechercher des informations précises, m'expliquer comment marche tel fonction et comment mettre en place tel chose. J'y ai aussi utilisé pour m'aider à créer le kanban et le rapport.
+En bref, je me suis aidé de l'IA pour mieux dé-bugger, pour rechercher des informations précises, m'expliquer comment marche tel fonction et comment mettre en place tel chose. J'y ai aussi utilisé pour m'aider à créer le kanban et le rapport.
 
 # Bilan du déroulement du projet
 
